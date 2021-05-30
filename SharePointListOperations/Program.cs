@@ -16,6 +16,10 @@ namespace SharePointListOperations
 
         static void Main(string[] args)
         {
+            //Versioninfo
+            Console.WriteLine("Ver 1.0.1");
+
+
             string amplio_connstring = ConfigurationManager.AppSettings["amplio_connectionstring"] + "BalKoc%22;";
             string mes_connstring = ConfigurationManager.AppSettings["mod_connectionstring"] + "MoMe19l.";
 
@@ -26,6 +30,9 @@ namespace SharePointListOperations
             bool dateBasedQuery = true;
             string testedQty = "";
             string plannedQty = "";
+
+            List<string> deviations = new List<string>();
+
             SqlConnection amplio_conn = new SqlConnection(amplio_connstring);
             SqlConnection mes_conn = new SqlConnection(mes_connstring);
 
@@ -40,9 +47,8 @@ namespace SharePointListOperations
             if (mes_is_connected)
             {
                 plannedQty = LSSqlOperations.SqlQuery(mes_conn, plannedQtyQuery, false, null, null, null, null, "other");
-            }
-
-            
+                deviations = LSSqlOperations.SQLStringListQueryFromScript(mes_conn, "deviations.sql", "devIron", "devGenerator", "devFinal", null, null);
+            }           
 
             string siteCollectionUrl = "https://laurastar.sharepoint.com/sites/MonitoringDatas";
             string userName = "bakocsis@laurastar.com";
@@ -68,6 +74,10 @@ namespace SharePointListOperations
             oListItem["Tested"] = Convert.ToInt32(testedQty);
             oListItem["Plan"] = Convert.ToInt32(plannedQty);
             oListItem["LastUpdate"] = DateTime.Parse(DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss"));
+            oListItem["IronDeviation"] = Convert.ToInt32(deviations.ElementAt(0).ToString());
+            oListItem["GeneratorDeviation"] = Convert.ToInt32(deviations.ElementAt(1).ToString());
+            oListItem["FinalDeviation"] = Convert.ToInt32(deviations.ElementAt(2).ToString());
+
 
             oListItem.Update();
 

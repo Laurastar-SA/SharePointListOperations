@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Data;
+using System.IO;
 
 namespace SharePointListOperations
 {
     public class LSSqlOperations
-    {
+    {       
         //Connect to the SQL server
         public static bool ConnectToSqlServer(SqlConnection conn, string conn_string)
         {
@@ -107,6 +108,67 @@ namespace SharePointListOperations
             SqlDataAdapter d_adapter = new SqlDataAdapter();
 
             return d_table;
+        }
+
+        //SQL Query to StringList
+        public static List<string> SQLStringListQueryFromScript(SqlConnection conn, string filename, string listparam1, string listparam2, string listparam3, string listparam4, string listparam5)
+        {
+            List<string> result = new List<string>();
+
+            SqlCommand command = new SqlCommand();
+            command.Connection = conn;
+
+            try
+            {
+                string script = File.ReadAllText(filename);
+                command.CommandText = script;
+
+                SqlDataReader reader = null;
+
+                try
+                {
+                    reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (listparam1 != null)
+                        {
+                            result.Add(reader[listparam1].ToString());
+                        }
+
+                        if (listparam2 != null)
+                        {
+                            result.Add(reader[listparam2].ToString());
+                        }
+
+                        if (listparam3 != null)
+                        {
+                            result.Add(reader[listparam3].ToString());
+                        }
+
+                        if (listparam4 != null)
+                        {
+                            result.Add(reader[listparam4].ToString());
+                        }
+
+                        if (listparam5 != null)
+                        {
+                            result.Add(reader[listparam5].ToString());
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Nem sikerült a lekérdezés futtatása." + Environment.NewLine + ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Nem sikerült a script felolvasása. Ellenőrizze, hogy a " + filename + " fájl a program könytvárában van-e." );
+            }
+            
+            return result;
+
+
         }
     }
 }
