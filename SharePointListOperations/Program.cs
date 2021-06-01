@@ -17,7 +17,7 @@ namespace SharePointListOperations
         static void Main(string[] args)
         {
             //Versioninfo
-            Console.WriteLine("Ver 1.0.1");
+            Console.WriteLine("Ver 1.0.2");
 
 
             string amplio_connstring = ConfigurationManager.AppSettings["amplio_connectionstring"] + "BalKoc%22;";
@@ -47,7 +47,7 @@ namespace SharePointListOperations
             if (mes_is_connected)
             {
                 plannedQty = LSSqlOperations.SqlQuery(mes_conn, plannedQtyQuery, false, null, null, null, null, "other");
-                deviations = LSSqlOperations.SQLStringListQueryFromScript(mes_conn, "deviations.sql", "devIron", "devGenerator", "devFinal", null, null);
+                deviations = LSSqlOperations.SQLStringListQueryFromScript(mes_conn, "deviations.sql", "devIron", "devGenerator", "devFinal", "sumWorkingTime", "sumWorkingTimeDone");
             }           
 
             string siteCollectionUrl = "https://laurastar.sharepoint.com/sites/MonitoringDatas";
@@ -77,7 +77,8 @@ namespace SharePointListOperations
             oListItem["IronDeviation"] = Convert.ToInt32(deviations.ElementAt(0).ToString());
             oListItem["GeneratorDeviation"] = Convert.ToInt32(deviations.ElementAt(1).ToString());
             oListItem["FinalDeviation"] = Convert.ToInt32(deviations.ElementAt(2).ToString());
-
+            oListItem["TotalNetWorkingHours"] = Convert.ToInt32(deviations.ElementAt(3).ToString());
+            oListItem["WorkingHoursDone"] = Convert.ToInt32(deviations.ElementAt(4).ToString());
 
             oListItem.Update();
 
