@@ -111,7 +111,7 @@ namespace SharePointListOperations
         }
 
         //SQL Query to StringList
-        public static List<string> SQLStringListQueryFromScript(SqlConnection conn, string filename, string listparam1, string listparam2, string listparam3, string listparam4, string listparam5)
+        public static List<string> SQLStringListQueryFromScript(SqlConnection conn, string filename, string listparam1, string listparam2, string listparam3, string listparam4, string listparam5, string listparam6, string listparam7, string listparam8)
         {
             List<string> result = new List<string>();
 
@@ -154,6 +154,22 @@ namespace SharePointListOperations
                         {
                             result.Add(reader[listparam5].ToString());
                         }
+
+                        if (listparam6 != null)
+                        {
+                            result.Add(reader[listparam6].ToString());
+                        }
+
+                        if (listparam7 != null)
+                        {
+                            result.Add(reader[listparam7].ToString());
+                        }
+
+                        if (listparam8 != null)
+                        {
+                            result.Add(reader[listparam8].ToString());
+                        }
+
                     }
                 }
                 catch (Exception ex)
